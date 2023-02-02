@@ -1,4 +1,0 @@
-function drilldown(e) {
-    current_geojson = e.sourceTarget.layer_no
-    
-}
