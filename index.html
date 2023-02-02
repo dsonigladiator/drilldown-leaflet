@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Import necessary libraries -->
+
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/leaflet.css"
+      crossorigin=""
+    />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/leaflet.js"
+      crossorigin=""
+    ></script>
+    <script
+      src="https://unpkg.com/@mapbox/leaflet-pip@latest/leaflet-pip.js"
+      crossorigin=""
+    ></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/slick-loader@1.1.38/slick-loader.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/slick-loader@1.1.38/slick-loader.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
+
+    <title>Drill Down Demo</title>
+  </head>
+  <body>
+    <div class="container">
+      <div id="map"></div>
+      <div id="btncontainer">
+        <button class="btn" id="drill-up">Drill Up</button>
+        <button class="btn" id="drill-down">Drill Down</button>
+      </div>
+    </div>
+
+    <script src="test6.js" type="module"></script>
+  </body>
+</html>
