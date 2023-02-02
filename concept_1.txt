@@ -1,7 +1,0 @@
-1. User will input csv file which has only 2 columns:
-- first column is name of the geojson file (n rows)
-- second column is the primary ID of each layer/geojson file (n rows)
-
-2. User will provide n geogjson files having same name as mentioned in the csv file
-
-3. We now apply filter function to filter out the children of each parent feature for every pair of parent-child layers
