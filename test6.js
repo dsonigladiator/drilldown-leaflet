@@ -199,7 +199,7 @@ function onEachFeature(feature, layer) {
         click: function (e) {
             if (e.sourceTarget.feature.properties.isHighlighted == false) {
                 selectedFeature = e.sourceTarget.feature;
-                console.log(selectedFeature);
+                // console.log(selectedFeature);
                 highlightFeature(e);
                 e.preventDefault;
                 current_event_object = e
@@ -264,11 +264,17 @@ let l3 = regionGeojson;
 let l4 = buildingGeojson;
 
 var csvData = [
-    { layer_no: 1, layer_name: "wardGeojson", layer_id: "ward_id", parent_layer_id: null },
-    { layer_no: 2, layer_name: "prabhagGeojson", layer_id: "prabhag_no", parent_layer_id: "Ward_id" },
-    { layer_no: 3, layer_name: "regionGeojson", layer_id: "region", parent_layer_id: "prabhag" },
-    { layer_no: 4, layer_name: "buildingGeojson", layer_id: "osm_id", parent_layer_id: "name" }
+    { layer_no: 1, layer_name: wardGeojson, layer_id: "ward_id", parent_layer_id: null },
+    { layer_no: 2, layer_name: prabhagGeojson, layer_id: "prabhag_no", parent_layer_id: "Ward_id" },
+    { layer_no: 3, layer_name: regionGeojson, layer_id: "region", parent_layer_id: "prabhag" },
+    { layer_no: 4, layer_name: buildingGeojson, layer_id: "osm_id", parent_layer_id: "name" }
 ];
+
+// set min and max layer_no values to set limits for drill up and drill down respectively
+// you cannot drill up beyond min_layer_no
+// you cannot drill down beyond max_layer_no
+var min_layer_no = csvData[0].layer_no;
+var max_layer_no = csvData[csvData.length - 1].layer_no;
 
 
 try {
@@ -286,10 +292,13 @@ catch (err) {
 let layerNumber = csvData[0]['layer_no'];
 console.log("Initial Layer No: ", layerNumber);
 
-// var currentGeojson = wardGeojson;
-// var arrayOfEs = [];
+// array of Es will store the event objects that were involved in drill down
+// this array can be thought of as an array storing the state of drill down and drill up
+// this array will be used in drilling up
+var arrayOfEs = [];
 
-let addedLayer = L.geoJson(wardGeojson, {
+// add initial layer
+let addedLayer = L.geoJson(csvData[0].layer_name, {
     style: style,
     onEachFeature: onEachFeature
 }).addTo(map);
@@ -307,31 +316,45 @@ function drillDown(e) {
 
     // Step 2
     let current_layer = csvData.find(layer => layer.layer_no === current_layer_no).layer_name;
-    console.log("Current layer: ", current_layer);
+    console.log("Current layer: ");
+    console.log(current_layer);
 
     // Step 3
     let next_layer_no = current_layer_no + 1;
 
     // Step 4
     let next_layer = csvData.find(layer => layer.layer_no === next_layer_no).layer_name;
-    console.log("Next layer: ", next_layer)
+    console.log("Next layer: ");
+    console.log(next_layer);
 
     // Step 5
-    let current_layer_id = current_event_object.sourceTarget.feature.properties[csvData.find(layer => layer.layer_no === current_layer_no).layer_id];
+    let selectedFeatureID = current_event_object.sourceTarget.feature.properties[csvData.find(layer => layer.layer_no === current_layer_no).layer_id];
+    console.log("Selected Feature primary key: ");
+    console.log(selectedFeatureID);
+
     let next_layer_parent_id = csvData.find(layer => layer.layer_no === next_layer_no).parent_layer_id;
+    console.log("Next Layer foreign key: ");
+    console.log(next_layer_parent_id);
 
     // Step 6
-    let selectedFeatureID = current_layer_id;
     let selectedChildIDs = next_layer.features.filter(
         (d) => d.properties[next_layer_parent_id] == selectedFeatureID
     );
+
+    // create feature collection from filtered out features
     let selectedChildFeatures = {
         type: "FeatureCollection",
         features: selectedChildIDs,
     };
 
+    console.log("SelectedChildFeatures contains: ");
+    console.log(selectedChildFeatures);
+
+
     map.fitBounds([current_event_object.sourceTarget._bounds]);
-    map.removeLayer(window[current_layer]);
+    map.eachLayer(function (layer) {
+        map.removeLayer(layer);
+    });
     tiles = new L.tileLayer("http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
         maxZoom: 20,
         subdomains: ["mt0", "mt1", "mt2", "mt3"],
@@ -343,40 +366,48 @@ function drillDown(e) {
         style: style,
         onEachFeature: onEachFeature,
     }).addTo(map);
+
+    arrayOfEs.push(current_event_object);
+    console.log(arrayOfEs);
 }
 
 
 function drillUp(e) {
-    // step 1: decrement the current layer number by 1 to go back to the previous layer
-    current_layer_no--;
+    // step 1
+    // find the last E
+    var latest_E = arrayOfEs[arrayOfEs.length - 1];
+    console.log("Latest e: ")
+    console.log(latest_E);
 
     // step 2: find the previous layer name based on the current layer number
-    current_layer = csvData.find(layer => layer.layer_no === current_layer_no).layer_name;
+    let current_layer_no = latest_E.sourceTarget.feature.properties.layer_no + 1
+    let current_layer = csvData.find(layer => layer.layer_no === current_layer_no).layer_name;
 
-    // step 3: decrement the next layer number by 1 to go back to the previous layer
-    next_layer_no--;
 
-    // step 4: find the next layer name based on the next layer number
-    next_layer = csvData.find(layer => layer.layer_no === next_layer_no).layer_name;
+    // step 3: find the next layer name based on the next layer number
+    let next_layer_no = current_layer_no - 1;
+    let next_layer = csvData.find(layer => layer.layer_no === next_layer_no).layer_name;
 
-    // step 5: find the parent layer id of the current layer
-    let parent_layer_id = csvData.find(layer => layer.layer_no === current_layer_no).parent_layer_id;
-
-    // step 6: find the features in the next layer whose parent layer id is equal to the parent layer id of the current layer
-    let selectedParentIDs = next_layer.features.filter(
-        (d) => d.properties.layer_id === parent_layer_id
-    );
-    let selectedParentFeatures = {
-        type: "FeatureCollection",
-        features: selectedParentIDs,
-    };
+    map.fitBounds(arrayOfEs[arrayOfEs.length - 1].sourceTarget._bounds);
 
     // step 7: remove the current layer from the map and add the previous layer to the map
-    map.removeLayer(current_layer);
-    L.geoJson(selectedParentFeatures, {
+    map.eachLayer(function (layer) {
+        map.removeLayer(layer);
+    });
+
+    tiles = new L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+
+    map.addLayer(tiles);
+
+    L.geoJson(next_layer, {
         style: style,
         onEachFeature: onEachFeature,
     }).addTo(map);
+
+    arrayOfEs.pop();
 }
 
 
