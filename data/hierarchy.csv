@@ -1,5 +1,0 @@
-layer_no,layer,layer_id,parent_layer_id
-1,ward.geojson,ward_id,null
-2,prabhag.geojson,prabhag_no,Ward_id
-3,region.geojson,region,prabhag
-4,building.geojson,osm_id,name

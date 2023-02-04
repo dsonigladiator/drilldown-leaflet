@@ -61,11 +61,11 @@ addRandomData(regionGeojson);
 addRandomData(buildingGeojson);
 
 // display to console
-console.log("After adding random data: ")
-console.log(wardGeojson);
-console.log(prabhagGeojson);
-console.log(regionGeojson);
-console.log(buildingGeojson);
+// console.log("After adding random data: ")
+// console.log(wardGeojson);
+// console.log(prabhagGeojson);
+// console.log(regionGeojson);
+// console.log(buildingGeojson);
 
 
 // =================================================================================================
@@ -203,12 +203,19 @@ function onEachFeature(feature, layer) {
                 highlightFeature(e);
                 e.preventDefault;
                 current_event_object = e
+                console.log("Selected Feature: ");
+                console.log(selectedFeature);
+                console.log("Current Event Object: ")
                 console.log(current_event_object);
             }
             else {
                 resetHighlight(e);
                 e.preventDefault;
+                selectedFeature = null;
                 current_event_object = null;
+                console.log("Selected Feature: ");
+                console.log(selectedFeature);
+                console.log("Current Event Object: ")
                 console.log(current_event_object);
             }
             // console.log(arrayOfFeature)
@@ -264,10 +271,10 @@ let l3 = regionGeojson;
 let l4 = buildingGeojson;
 
 var csvData = [
-    { layer_no: 1, layer_name: wardGeojson, layer_id: "ward_id", parent_layer_id: null },
-    { layer_no: 2, layer_name: prabhagGeojson, layer_id: "prabhag_no", parent_layer_id: "Ward_id" },
-    { layer_no: 3, layer_name: regionGeojson, layer_id: "region", parent_layer_id: "prabhag" },
-    { layer_no: 4, layer_name: buildingGeojson, layer_id: "osm_id", parent_layer_id: "name" }
+    { layer_no: 1, layer_name: wardGeojson, layer_id: "ward_id", parent_id: null },
+    { layer_no: 2, layer_name: prabhagGeojson, layer_id: "prabhag_no", parent_id: "Ward_Id" },
+    { layer_no: 3, layer_name: regionGeojson, layer_id: "region", parent_id: "prabhag" },
+    { layer_no: 4, layer_name: buildingGeojson, layer_id: "osm_id", parent_id: "name" }
 ];
 
 // set min and max layer_no values to set limits for drill up and drill down respectively
@@ -296,6 +303,8 @@ console.log("Initial Layer No: ", layerNumber);
 // this array can be thought of as an array storing the state of drill down and drill up
 // this array will be used in drilling up
 var arrayOfEs = [];
+
+let selectedFeature;
 
 // add initial layer
 let addedLayer = L.geoJson(csvData[0].layer_name, {
@@ -327,18 +336,21 @@ function drillDown(e) {
     console.log("Next layer: ");
     console.log(next_layer);
 
+    console.log("Next Layer features: ");
+    console.log(next_layer.features);
+
     // Step 5
     let selectedFeatureID = current_event_object.sourceTarget.feature.properties[csvData.find(layer => layer.layer_no === current_layer_no).layer_id];
     console.log("Selected Feature primary key: ");
     console.log(selectedFeatureID);
 
-    let next_layer_parent_id = csvData.find(layer => layer.layer_no === next_layer_no).parent_layer_id;
+    let next_layer_parent_id = csvData.find(layer => layer.layer_no === next_layer_no).parent_id;
     console.log("Next Layer foreign key: ");
     console.log(next_layer_parent_id);
 
     // Step 6
     let selectedChildIDs = next_layer.features.filter(
-        (d) => d.properties[next_layer_parent_id] == selectedFeatureID
+        (d) => d.properties[next_layer_parent_id] === selectedFeatureID
     );
 
     // create feature collection from filtered out features
@@ -367,7 +379,11 @@ function drillDown(e) {
         onEachFeature: onEachFeature,
     }).addTo(map);
 
+    resetHighlight(current_event_object);
+
+
     arrayOfEs.push(current_event_object);
+    console.log("Current array of Es: ");
     console.log(arrayOfEs);
 }
 
@@ -407,7 +423,13 @@ function drillUp(e) {
         onEachFeature: onEachFeature,
     }).addTo(map);
 
+
+    selectedFeature = null;
+    current_event_object = null;
+
     arrayOfEs.pop();
+    console.log("Current array of Es: ");
+    console.log(arrayOfEs);
 }
 
 
@@ -418,13 +440,20 @@ function drillUp(e) {
 //================================================================================================
 //================================================================================================
 
-let selectedFeature;
 
 
 // add click event listeners to the buttons
-document.getElementById('drill-down').addEventListener("click", drillDown);
+document.getElementById('drill-down').addEventListener("click", () => {
+    drillDown();
+    selectedFeature = null;
+    current_event_object = null;
+});
 
-document.getElementById('drill-up').addEventListener("click", drillUp);
+document.getElementById('drill-up').addEventListener("click", () => {
+    drillUp();
+    selectedFeature = null;
+    current_event_object = null;
+});
 
 
 

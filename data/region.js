@@ -21,7 +21,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Tarapore Towers",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -55,7 +55,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Tarapore Garden",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -88,7 +88,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Maheshwari Chowk",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -121,7 +121,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Walawalkar",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -154,7 +154,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Heera Panna",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -189,7 +189,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "BMC colony",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -225,7 +225,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Gyansagar",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -263,7 +263,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Serenity",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -303,7 +303,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Gujarat Bhavan",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -340,7 +340,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Anandnagar",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -391,7 +391,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Behram baug Kadam Nagar",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -443,7 +443,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Santosh Nagar",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -478,7 +478,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Roshan Nagar",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -521,7 +521,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Behram Baugh Parasi Colony",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -571,7 +571,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Shakti Nagar",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -650,7 +650,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Ganesh Nagar",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -691,7 +691,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "BMC Plot",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -727,7 +727,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Fakeer Waadi",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -764,7 +764,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Mhada",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
@@ -803,7 +803,7 @@ export const regionGeojson = {
         "drawOrder": null,
         "icon": null,
         "region": "Qureshi Compound",
-        "ward": "061",
+        "prabhag": "061",
         "layer_no": 3
       },
       "geometry": {
