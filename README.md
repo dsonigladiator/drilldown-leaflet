@@ -3,8 +3,8 @@ Contains code for drill up and drill down functionality in leaflet
 
 Current Status:
 - End to end drill down and drill up is working as expected
-- Need to take care of edge cases now, such as no drill down further than bottom most layer and no drill up further than top most layer
-- Drill up filtering needs to be sorted out
+- Edge cases such as no drill down further than bottom most layer and no drill up further than top most layer have been taken care of
+- Drill up filtering needs to be sorted out (might require some hard coding for middle layers in layer hierarchy)
 
 Developed by: 
 - Divyang Soni, VJTI
