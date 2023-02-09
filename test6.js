@@ -61,11 +61,11 @@ addRandomData(regionGeojson);
 addRandomData(buildingGeojson);
 
 // display to console
-// console.log("After adding random data: ")
-// console.log(wardGeojson);
-// console.log(prabhagGeojson);
-// console.log(regionGeojson);
-// console.log(buildingGeojson);
+console.log("After adding random data: ")
+console.log(wardGeojson);
+console.log(prabhagGeojson);
+console.log(regionGeojson);
+console.log(buildingGeojson);
 
 
 // =================================================================================================
@@ -306,7 +306,7 @@ var arrayOfEs = [];
 
 let selectedFeature;
 
-// add initial layer
+// add first layer
 let addedLayer = L.geoJson(csvData[0].layer_name, {
     style: style,
     onEachFeature: onEachFeature
@@ -321,6 +321,10 @@ let addedLayer = L.geoJson(csvData[0].layer_name, {
 function drillDown(e) {
     // Step 1
     // let current_event_object = e // assume this is the selected feature event object
+    if (selectedFeature == null) {
+        alert("No feature selected! Please select a feature before clicking drill down button")
+    }
+
     let current_layer_no = selectedFeature.properties.layer_no;
 
     // Step 2
@@ -330,6 +334,12 @@ function drillDown(e) {
 
     // Step 3
     let next_layer_no = current_layer_no + 1;
+
+    // if next_layer is max layer, exit the function with alert
+    if (current_layer_no === max_layer_no) {
+        alert("No further Drill Down is possible!")
+        return;
+    }
 
     // Step 4
     let next_layer = csvData.find(layer => layer.layer_no === next_layer_no).layer_name;
@@ -348,7 +358,7 @@ function drillDown(e) {
     console.log("Next Layer foreign key: ");
     console.log(next_layer_parent_id);
 
-    // Step 6
+    // Step 6 MOST IMPORTANT
     let selectedChildIDs = next_layer.features.filter(
         (d) => d.properties[next_layer_parent_id] === selectedFeatureID
     );
@@ -361,7 +371,6 @@ function drillDown(e) {
 
     console.log("SelectedChildFeatures contains: ");
     console.log(selectedChildFeatures);
-
 
     map.fitBounds([current_event_object.sourceTarget._bounds]);
     map.eachLayer(function (layer) {
@@ -395,14 +404,32 @@ function drillUp(e) {
     console.log("Latest e: ")
     console.log(latest_E);
 
-    // step 2: find the previous layer name based on the current layer number
+    if (latest_E == undefined) {
+        alert("No further Drill Up is possible!")
+        return;
+    }
+
+    // // step 2: find the previous layer name based on the current layer number
     let current_layer_no = latest_E.sourceTarget.feature.properties.layer_no + 1
     let current_layer = csvData.find(layer => layer.layer_no === current_layer_no).layer_name;
 
 
-    // step 3: find the next layer name based on the next layer number
+    // // step 3: find the next layer name based on the next layer number
     let next_layer_no = current_layer_no - 1;
     let next_layer = csvData.find(layer => layer.layer_no === next_layer_no).layer_name;
+
+    // // step 5: find the parent layer id of the current layer
+    let parent_layer_id = csvData.find(layer => layer.layer_no === current_layer_no).parent_layer_id;
+
+    // // step 6: find the features in the next layer whose parent layer id is equal to the parent layer id of the current layer
+    let selectedParentIDs = next_layer.features.filter(
+        (d) => d.properties.layer_id === parent_layer_id
+    );
+
+    // let selectedParentFeatures = {
+    //     type: "FeatureCollection",
+    //     features: selectedParentIDs,
+    // };
 
     map.fitBounds(arrayOfEs[arrayOfEs.length - 1].sourceTarget._bounds);
 
@@ -418,10 +445,18 @@ function drillUp(e) {
 
     map.addLayer(tiles);
 
-    L.geoJson(next_layer, {
-        style: style,
-        onEachFeature: onEachFeature,
-    }).addTo(map);
+    if (next_layer_no === min_layer_no) {
+        L.geoJson(csvData[0].layer_name, {
+            style: style,
+            onEachFeature: onEachFeature
+        }).addTo(map)
+    }
+    else {
+        L.geoJson(arrayOfEs[arrayOfEs.length - 1].sourceTarget.feature, {
+            style: style,
+            onEachFeature: onEachFeature,
+        }).addTo(map);
+    }
 
 
     selectedFeature = null;
